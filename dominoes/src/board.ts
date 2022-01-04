@@ -11,13 +11,10 @@ export default class Board {
 
   constructor() {
     for (var _i = 0; _i <= 6; _i++) {
-      //   for (var _j = 0; _j <= _i; _j++) {
-      //     this._pile.push(new Piece(_i, _j));
-      //   }
-      this._pile.push(new Piece(_i, 0));
-      this._pile.push(new Piece(_i, 1));
+      for (var _j = 0; _j <= _i; _j++) {
+        this._pile.push(new Piece(_i, _j));
+      }
     }
-    this._pile.push(new Piece(8, 8));
     shuffleArray(this._pile);
   }
 
