@@ -61,7 +61,7 @@ export default class DominoesGame {
     this.initGame();
 
     console.log("#########################################################");
-    console.log("#  Game started!\n#");
+    console.log("# Game started!\n#");
     console.log(`# ${this.players[0].nickname} VS ${this.players[1].nickname}`);
     console.log("#########################################################");
 
@@ -105,14 +105,12 @@ export default class DominoesGame {
     this._gameIsOn = false;
     this.winner = winner;
     this.board.showFinalArrangement(this.players);
-    console.log("#  Game over. See final arrangement above.\n#");
+    console.log("# Game over. See final arrangement above.\n#");
     if (winner) {
       console.log(`# ${this.winner.nickname} won.`);
     } else {
       console.log("# It's a draw. =(");
     }
-    const colorCyan = "\x1b[36m%s\x1b[0m";
-    const colorYellow = "\x1b[33m%s\x1b[0m";
     console.log("#########################################################");
   }
 

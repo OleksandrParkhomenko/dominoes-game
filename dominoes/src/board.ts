@@ -127,11 +127,12 @@ export default class Board {
     const colorRed = "\x1b[31m%s\x1b[0m";
 
     console.log("\n#########################################################");
-    console.log(`##    Final arrangement of pieces:`);
-    console.log(`##    *pieces are colored:`);
-    console.log(colorRed, "##  for first piece");
-    console.log(colorCyan, `##  for ${players[0].nickname}`);
-    console.log(colorYellow, `##  for ${players[1].nickname}`);
+    console.log("# Final arrangement of pieces:");
+
+    console.log(`#  *pieces are colored:`);
+    console.log(colorRed, "#  for first piece");
+    console.log(colorCyan, `#  for ${players[0].nickname}`);
+    console.log(colorYellow, `#  for ${players[1].nickname}`);
 
     this._turns.sort((a, b) =>
       a.placement === b.placement
@@ -149,6 +150,14 @@ export default class Board {
           : colorRed;
       turn.draw(color);
     }
+    console.log("\n#########################################################");
+    console.log(
+      `# ${players[0].nickname} has ${players[0].pieces.length} left`
+    );
+    console.log(
+      `# ${players[1].nickname} has ${players[1].pieces.length} left`
+    );
+    console.log(`# It took ${this._turns.length} turn(-s)`);
     console.log("#########################################################");
   }
 }

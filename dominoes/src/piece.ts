@@ -8,4 +8,14 @@ export default class Piece {
     this.rightSide = rightSide;
     this.isDouble = leftSide === rightSide;
   }
+
+  public show() {
+    const piece =
+      "\t _____ \t\n" +
+      `\t | ${this.leftSide} |\t\n` +
+      "\t ----- \t\n" +
+      `\t | ${this.rightSide} |\t\n` +
+      "\t ⎻⎻⎻⎻⎻ \t";
+    console.log(piece);
+  }
 }

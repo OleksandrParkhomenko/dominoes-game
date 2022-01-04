@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dominoes": "./node_modules/ts-node/dist/bin.js app.ts",
+    "dominoes-logs": "./node_modules/ts-node/dist/bin.js app.ts --logs",
     "test": "jest"
   },
   "dependencies": {

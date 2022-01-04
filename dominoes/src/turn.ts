@@ -47,12 +47,12 @@ export class Turn {
     if (this.rotation === Rotation.Direct) {
       console.log(
         color,
-        `\t_____\n\t| ${this.piece.leftSide} |\n\t-----\n\t| ${this.piece.rightSide} |\n\t⎻⎻⎻⎻⎻`
+        `\t _____\n\t | ${this.piece.leftSide} |\n\t -----\n\t | ${this.piece.rightSide} |\n\t ⎻⎻⎻⎻⎻`
       );
     } else if (this.rotation === Rotation.Rotated) {
       console.log(
         color,
-        `\t_____\n\t| ${this.piece.rightSide} |\n\t-----\n\t| ${this.piece.leftSide} |\n\t⎻⎻⎻⎻⎻`
+        `\t _____\n\t | ${this.piece.rightSide} |\n\t -----\n\t | ${this.piece.leftSide} |\n\t ⎻⎻⎻⎻⎻`
       );
     }
     if (this.rotation === Rotation.Vertical) {

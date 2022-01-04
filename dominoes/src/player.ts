@@ -42,24 +42,30 @@ export default class Player {
       removeElementFromArray(this.pieces, pieceToPut);
       if (this._logTurns) {
         console.log(`##     ${this.nickname} put piece on board:`);
-        console.log(pieceToPut);
+        pieceToPut.show();
       }
       return true;
     } else {
-      const newPiece = this.takePieceFromPile(board);
-      if (newPiece) {
-        this.putPieceOnBoard(newPiece, board);
-        removeElementFromArray(this.pieces, piece);
-        if (this._logTurns) {
-          console.log(`##     ${this.nickname} pick piece from pile:`);
-          console.log(newPiece);
-          console.log(`##     ${this.nickname} put piece on board:`);
-          console.log(newPiece);
+      let newPiece: Piece = null;
+      while (!board.hasNoPiecesInThePile) {
+        newPiece = this.takePieceFromPile(board);
+        if (
+          (newPiece && board.leftSideNumber === newPiece.leftSide) ||
+          board.leftSideNumber === newPiece.rightSide
+        ) {
+          this.putPieceOnBoard(newPiece, board);
+          removeElementFromArray(this.pieces, piece);
+          if (this._logTurns) {
+            console.log(`##     ${this.nickname} pick piece from pile:`);
+            newPiece.show();
+            console.log(`##     ${this.nickname} put piece on board:`);
+            newPiece.show();
+          }
+          return true;
         }
-        return true;
       }
+      return false;
     }
-    return false;
   }
 
   public putPieceOnBoard(piece: Piece, board: Board) {
@@ -76,7 +82,15 @@ export default class Player {
   public showCurrentPieces() {
     console.log("#########################################################");
     console.log(`##     ${this.nickname} has ${this.pieces.length} pieces:`);
-    console.log(this.pieces);
+    let lineByLineDraw: string[] = ["", "", "", "", ""];
+    for (var piece of this.pieces) {
+      lineByLineDraw[0] += "\t _____ \t";
+      lineByLineDraw[1] += `\t | ${piece.leftSide} |\t`;
+      lineByLineDraw[2] += "\t ----- \t";
+      lineByLineDraw[3] += `\t | ${piece.rightSide} |\t`;
+      lineByLineDraw[4] += "\t ⎻⎻⎻⎻⎻ \t";
+    }
+    lineByLineDraw.forEach((line) => console.log(line));
     console.log("#########################################################");
   }
 }
