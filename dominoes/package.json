@@ -1,0 +1,17 @@
+{
+  "name": "dominoes-game",
+  "version": "0.0.1",
+  "scripts": {
+    "dominoes": "./node_modules/ts-node/dist/bin.js app.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ts-node": "^3.2.0",
+    "typescript": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "@types/node": "^8.0.7",
+    "jest": "^27.4.5"
+  }
+}
