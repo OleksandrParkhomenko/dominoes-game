@@ -1,10 +1,17 @@
 import Board from "./board";
+import {
+  logGameResult,
+  logGameStart,
+  logTurnInGame,
+  logSkipTurn,
+  logFinalArrangement,
+  logPlayerCurrentPieces,
+} from "./logger";
 import Piece from "./piece";
-import Player from "./player";
+import { Player, MoveStatus } from "./player";
 
 export default class DominoesGame {
   players: Player[];
-  winner: Player;
   currentPlayer: number;
   board: Board;
   private _gameIsOn: boolean = false;
@@ -34,65 +41,52 @@ export default class DominoesGame {
   }
 
   private chooseFirstMovePlayer() {
-    // choosing player holding the highest value piece to start the game
-    var tempHighestValuePiece: Piece = this.players[0].pieces[0];
-    var tempHighestValuePiecePlayer = 0;
-    for (var [index, player] of this.players.entries()) {
-      if (player.hasPieces) {
-        for (var piece of player.pieces) {
-          if (
-            tempHighestValuePiece.leftSide + tempHighestValuePiece.rightSide <
-              piece.leftSide + piece.rightSide ||
-            (tempHighestValuePiece.leftSide +
-              tempHighestValuePiece.rightSide ===
-              piece.leftSide + piece.rightSide &&
-              tempHighestValuePiece.leftSide < piece.leftSide)
-          ) {
-            tempHighestValuePiece = piece;
-            tempHighestValuePiecePlayer = index;
-          }
-        }
-      }
+    let playersHighestValuePieces: Piece[] = [];
+    for (var player of this.players) {
+      const currentHighestValuePiece = player.pieces.reduce((a, b) =>
+        a.greaterThan(b) ? a : b
+      );
+      playersHighestValuePieces.push(currentHighestValuePiece);
     }
-    return tempHighestValuePiecePlayer;
+    const highestValuePiece = playersHighestValuePieces.reduce((a, b) =>
+      a.greaterThan(b) ? a : b
+    );
+    return playersHighestValuePieces.indexOf(highestValuePiece);
   }
 
   public startGame() {
     this.initGame();
-
-    console.log("#########################################################");
-    console.log("# Game started!\n#");
-    console.log(`# ${this.players[0].nickname} VS ${this.players[1].nickname}`);
-    console.log("#########################################################");
+    logGameStart(this.players);
 
     let _prevPlayerMissedATurn = false;
     while (!this.gameOver && this.players.every((player) => player.hasPieces)) {
       if (this._logTurns) {
-        console.log(
-          `\n##  Now it's ${this.players[this.currentPlayer].nickname}'s turn.`
-        );
-        this.board.showCurrentState();
-        this.players.forEach((player) => player.showCurrentPieces());
+        logTurnInGame(this);
       }
 
-      if (this.players[this.currentPlayer].makeMove(this.board)) {
-        if (!this.players[this.currentPlayer].hasPieces) {
-          this.stopGame(this.players[this.currentPlayer]);
-        } else {
+      const moveStatus = this.players[this.currentPlayer].makeMove(this.board);
+      switch (moveStatus) {
+        case MoveStatus.Success:
+          if (!this.players[this.currentPlayer].hasPieces) {
+            this.stopGame(this.players[this.currentPlayer]);
+            break;
+          }
           _prevPlayerMissedATurn = false;
-          this._nextPlayerTurn();
-        }
-      } else if (_prevPlayerMissedATurn && this.board.hasNoPiecesInThePile) {
-        this.stopGame();
-      } else {
-        _prevPlayerMissedATurn = true;
-        if (this._logTurns) {
-          console.log(
-            `##  ${this.players[this.currentPlayer].nickname} skips the turn.`
-          );
-        }
-        this._nextPlayerTurn();
+          break;
+        case MoveStatus.Skip:
+          if (_prevPlayerMissedATurn && this.board.hasNoPiecesInThePile) {
+            this.stopGame();
+          }
+          _prevPlayerMissedATurn = true;
+          if (this._logTurns) {
+            logSkipTurn(this.players[this.currentPlayer]);
+          }
+          break;
+        default:
+          break;
       }
+
+      this._nextPlayerTurn();
     }
   }
 
@@ -103,15 +97,8 @@ export default class DominoesGame {
 
   public stopGame(winner: Player = null) {
     this._gameIsOn = false;
-    this.winner = winner;
-    this.board.showFinalArrangement(this.players);
-    console.log("# Game over. See final arrangement above.\n#");
-    if (winner) {
-      console.log(`# ${this.winner.nickname} won.`);
-    } else {
-      console.log("# It's a draw. =(");
-    }
-    console.log("#########################################################");
+    logFinalArrangement(this);
+    logGameResult(this, winner);
   }
 
   public get gameOver() {

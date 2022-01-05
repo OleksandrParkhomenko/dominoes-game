@@ -42,24 +42,4 @@ export class Turn {
     this.placement = placement;
     this.number = number;
   }
-
-  public draw(color: string) {
-    if (this.rotation === Rotation.Direct) {
-      console.log(
-        color,
-        `\t _____\n\t | ${this.piece.leftSide} |\n\t -----\n\t | ${this.piece.rightSide} |\n\t ⎻⎻⎻⎻⎻`
-      );
-    } else if (this.rotation === Rotation.Rotated) {
-      console.log(
-        color,
-        `\t _____\n\t | ${this.piece.rightSide} |\n\t -----\n\t | ${this.piece.leftSide} |\n\t ⎻⎻⎻⎻⎻`
-      );
-    }
-    if (this.rotation === Rotation.Vertical) {
-      console.log(
-        color,
-        `\t|${this.piece.rightSide} | ${this.piece.leftSide}|`
-      );
-    }
-  }
 }

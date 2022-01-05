@@ -1,8 +1,13 @@
 import Board from "./board";
 import { removeElementFromArray } from "./helpers";
+import { logPickNewPiece, logPutPiece } from "./logger";
 import Piece from "./piece";
 
-export default class Player {
+export enum MoveStatus {
+  Success = 0,
+  Skip = 1,
+}
+export class Player {
   nickname: string;
   pieces: Piece[] = [];
   private _logTurns: boolean;
@@ -41,10 +46,9 @@ export default class Player {
       this.putPieceOnBoard(pieceToPut, board);
       removeElementFromArray(this.pieces, pieceToPut);
       if (this._logTurns) {
-        console.log(`##     ${this.nickname} put piece on board:`);
-        pieceToPut.show();
+        logPutPiece(pieceToPut, this);
       }
-      return true;
+      return MoveStatus.Success;
     } else {
       let newPiece: Piece = null;
       while (!board.hasNoPiecesInThePile) {
@@ -54,17 +58,15 @@ export default class Player {
           board.leftSideNumber === newPiece.rightSide
         ) {
           this.putPieceOnBoard(newPiece, board);
-          removeElementFromArray(this.pieces, piece);
+          removeElementFromArray(this.pieces, newPiece);
           if (this._logTurns) {
-            console.log(`##     ${this.nickname} pick piece from pile:`);
-            newPiece.show();
-            console.log(`##     ${this.nickname} put piece on board:`);
-            newPiece.show();
+            logPickNewPiece(newPiece, this);
+            logPutPiece(newPiece, this);
           }
-          return true;
+          return MoveStatus.Success;
         }
       }
-      return false;
+      return MoveStatus.Skip;
     }
   }
 
@@ -77,20 +79,5 @@ export default class Player {
     } else {
       board.putPieceOnRightSide(piece, this);
     }
-  }
-
-  public showCurrentPieces() {
-    console.log("#########################################################");
-    console.log(`##     ${this.nickname} has ${this.pieces.length} pieces:`);
-    let lineByLineDraw: string[] = ["", "", "", "", ""];
-    for (var piece of this.pieces) {
-      lineByLineDraw[0] += "\t _____ \t";
-      lineByLineDraw[1] += `\t | ${piece.leftSide} |\t`;
-      lineByLineDraw[2] += "\t ----- \t";
-      lineByLineDraw[3] += `\t | ${piece.rightSide} |\t`;
-      lineByLineDraw[4] += "\t ⎻⎻⎻⎻⎻ \t";
-    }
-    lineByLineDraw.forEach((line) => console.log(line));
-    console.log("#########################################################");
   }
 }
