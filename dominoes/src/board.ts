@@ -1,7 +1,7 @@
 import { shuffleArray } from "./helpers";
 import { logTurnInFinalArrangement } from "./logger";
 import Piece from "./piece";
-import Player from "./player";
+import { Player } from "./player";
 import { Placement, Rotation, Turn } from "./turn";
 
 export default class Board {

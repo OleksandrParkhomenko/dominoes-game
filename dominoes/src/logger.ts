@@ -1,7 +1,7 @@
 import Board from "./board";
 import DominoesGame from "./game";
 import Piece from "./piece";
-import Player from "./player";
+import { Player } from "./player";
 import { Placement, Rotation, Turn } from "./turn";
 
 export const logTurnInGame = (game: DominoesGame) => {

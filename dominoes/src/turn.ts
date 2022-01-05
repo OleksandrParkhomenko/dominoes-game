@@ -1,5 +1,5 @@
 import Piece from "./piece";
-import Player from "./player";
+import { Player } from "./player";
 
 export enum Rotation {
   /* Explanation: 
